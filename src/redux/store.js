@@ -24,6 +24,7 @@ import {
 
 import * as actions from './phonebook-actions';
 import logger from 'redux-logger';
+import { register, login, logOut } from './auth-actions';
 
 const middleware =
   process.env.NODE_ENV === 'development'
@@ -54,6 +55,38 @@ const middleware =
 //       return state;
 //   }
 // };
+const initialState = {
+  user: { name: null, email: null },
+  token: '',
+  isLoggedIn: false,
+};
+
+const authReducer = createReducer(initialState, {
+  [register.fulfilled]: (state, { payload }) => ({
+    ...state,
+    isLoggedIn: true,
+    token: payload.token,
+    user: payload.user,
+  }),
+  [register.rejected]: (_, { payload }) => {
+    console.log(payload);
+  },
+  [login.fulfilled]: (state, { payload }) => ({
+    ...state,
+    isLoggedIn: true,
+    token: payload.token,
+    user: payload.user,
+  }),
+  [logOut.fulfilled]: (state, _) => ({
+    ...state,
+    user: { name: null, email: null },
+    token: '',
+    isLoggedIn: false,
+  }),
+  [logOut.rejected]: (_, { payload }) => {
+    console.log(payload);
+  },
+});
 
 const items = createReducer([], {
   [actions.fetchContacts.fulfilled]: (_, { payload }) => payload,
@@ -89,8 +122,15 @@ const contactsReducer = combineReducers({
 //   blacklist: ['filter'],
 // };
 
+const authPersistConfig = {
+  key: 'auth',
+  storage,
+  whitelist: ['token'],
+};
+
 const rootReducer = combineReducers({
   contacts: contactsReducer,
+  auth: persistReducer(authPersistConfig, authReducer),
 });
 
 const store = configureStore({
@@ -99,6 +139,6 @@ const store = configureStore({
   middleware,
 });
 
-// const persistor = persistStore(store);
+const persistor = persistStore(store);
 
-export { store };
+export { store, persistor };

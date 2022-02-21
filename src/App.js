@@ -32,6 +32,7 @@ function App() {
     return state.contacts;
   });
   const contacts = useSelector(state => state.contacts.items);
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   // console.log('contacts', contacts);
 
   // const contacts1 = dispatch(fetchContacts());
@@ -81,7 +82,7 @@ function App() {
 
   const filteredContacts = filterContacts();
 
-  return (
+  return isLoggedIn ? (
     <Fragment>
       <Form onInput={onInput} onClick={onClick}></Form>
       <SectionStyled>
@@ -92,6 +93,8 @@ function App() {
         ></Contacts>
       </SectionStyled>
     </Fragment>
+  ) : (
+    <></>
   );
 }
 
