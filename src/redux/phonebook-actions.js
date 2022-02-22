@@ -20,13 +20,16 @@ export const searchContacts = createAction('phonebook/searchContacts');
 
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
-  async id => {
+  async ({ id }, thunkAPI) => {
+     const state = thunkAPI.getState();
+     const token = state.auth.token;
     const response = await fetch(
-      `https://620677d592dd6600171c0afc.mockapi.io/contacts/${id}`,
+      `https://connections-api.herokuapp.com/contacts/${id}`,
       {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Bearer ${token}`,
         },
         // body: JSON.stringify(id),
       },
@@ -37,9 +40,18 @@ export const deleteContact = createAsyncThunk(
 
 export const fetchContacts = createAsyncThunk(
   'contacts/getContacts',
-  async () => {
+  async (_, thunkAPI) => {
+     const state = thunkAPI.getState();
+     const token = state.auth.token;
     const response = await fetch(
-      'https://620677d592dd6600171c0afc.mockapi.io/contacts',
+      'https://connections-api.herokuapp.com/contacts',
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Bearer ${token}`,
+        },
+      },
     ).then(res => res.json());
     return response;
   },
@@ -47,19 +59,20 @@ export const fetchContacts = createAsyncThunk(
 
 export const addContact = createAsyncThunk(
   'contacts/addContact',
-  async contact => {
+  async ({ name, number }, thunkAPI) => {
+     const state = thunkAPI.getState();
+     const token = state.auth.token;
     const response = await fetch(
-      'https://620677d592dd6600171c0afc.mockapi.io/contacts',
+      'https://connections-api.herokuapp.com/contacts',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(contact),
+        body: JSON.stringify({name, number}),
       },
     ).then(res => res.json());
     return response;
   },
 );
-
-

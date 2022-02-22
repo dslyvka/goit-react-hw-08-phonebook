@@ -1,9 +1,10 @@
 import { Fragment } from 'react';
 import { StyledList } from './Contacts.styled';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Contacts({ contacts, deleteContact }) {
   const dispatch = useDispatch();
+  const token = useSelector(state => state.auth.token);
   return (
     <Fragment>
       <StyledList>
@@ -16,7 +17,7 @@ function Contacts({ contacts, deleteContact }) {
                 <button
                   id={id}
                   onClick={() => {
-                    dispatch(deleteContact(id));
+                    dispatch(deleteContact({id}));
                   }}
                 >
                   delete

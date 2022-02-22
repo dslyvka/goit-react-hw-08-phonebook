@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { fetchContacts } from './redux/phonebook-actions';
+import { fetchCurrentUser } from './redux/auth-actions';
 
 import {
   addContact,
@@ -20,19 +21,24 @@ import {
 function App() {
   const dispatch = useDispatch();
 
+  const contacts = useSelector(state => state.contacts.items);
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+
   useEffect(() => {
-    dispatch(fetchContacts());
+    if (isLoggedIn) dispatch(fetchContacts());
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    dispatch(fetchCurrentUser());
   }, []);
 
-  const [phone, setPhone] = useState('');
+  const [number, setPhone] = useState('');
   const [name, setName] = useState('');
 
   const { filter } = useSelector(state => {
     // console.log(state);
     return state.contacts;
   });
-  const contacts = useSelector(state => state.contacts.items);
-  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   // console.log('contacts', contacts);
 
   // const contacts1 = dispatch(fetchContacts());
@@ -66,7 +72,7 @@ function App() {
         alert(`${name} is already in contacts`);
         return;
       }
-      dispatch(addContact({ name, phone }));
+      dispatch(addContact({ name, number }));
       // dispatch(fetchContacts());
       // Пропихиваем объект, котоорый в редьюсере будет в виде payload
     }

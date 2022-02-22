@@ -1,10 +1,20 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { login } from '../../redux/auth-actions';
 
 export default function Login() {
+  // const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+  // let navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     return navigate('/');
+  //   }
+  // }, [isLoggedIn]);
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
 

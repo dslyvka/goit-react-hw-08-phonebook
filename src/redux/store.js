@@ -24,7 +24,7 @@ import {
 
 import * as actions from './phonebook-actions';
 import logger from 'redux-logger';
-import { register, login, logOut } from './auth-actions';
+import { register, login, logOut, fetchCurrentUser } from './auth-actions';
 
 const middleware =
   process.env.NODE_ENV === 'development'
@@ -57,7 +57,7 @@ const middleware =
 // };
 const initialState = {
   user: { name: null, email: null },
-  token: '',
+  token: null,
   isLoggedIn: false,
 };
 
@@ -80,20 +80,25 @@ const authReducer = createReducer(initialState, {
   [logOut.fulfilled]: (state, _) => ({
     ...state,
     user: { name: null, email: null },
-    token: '',
+    token: null,
     isLoggedIn: false,
   }),
   [logOut.rejected]: (_, { payload }) => {
     console.log(payload);
   },
+  [fetchCurrentUser.fulfilled]: (state, { payload }) => ({
+    ...state,
+    isLoggedIn: true,
+    user: payload,
+  }),
 });
 
 const items = createReducer([], {
   [actions.fetchContacts.fulfilled]: (_, { payload }) => payload,
   //                     Деструктуризируем payload из action
   [actions.addContact.fulfilled]: (state, { payload }) => [...state, payload],
-  [actions.deleteContact.fulfilled]: (state, { payload }) => [
-    ...state.filter(contact => contact.id !== payload.id),
+  [actions.deleteContact.fulfilled]: (state, { meta }) => [
+    ...state.filter(contact => contact.id !== meta.arg.id),
   ],
 });
 

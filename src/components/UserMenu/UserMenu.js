@@ -9,7 +9,6 @@ import { logOut } from '../../redux/auth-actions';
 export default function UserMenu() {
   const user = useSelector(state => state.auth.user);
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
-  const token = useSelector(state => state.auth.token);
 
   let navigate = useNavigate();
 
@@ -22,7 +21,7 @@ export default function UserMenu() {
   const dispatch = useDispatch();
 
   const handleLogOutClick = () => {
-    dispatch(logOut(token));
+    dispatch(logOut());
   };
 
   return (
