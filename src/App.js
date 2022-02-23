@@ -88,7 +88,7 @@ function App() {
 
   const filteredContacts = filterContacts();
 
-  return isLoggedIn ? (
+  return (
     <Fragment>
       <Form onInput={onInput} onClick={onClick}></Form>
       <SectionStyled>
@@ -99,8 +99,6 @@ function App() {
         ></Contacts>
       </SectionStyled>
     </Fragment>
-  ) : (
-    <></>
   );
 }
 

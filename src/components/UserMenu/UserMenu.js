@@ -12,16 +12,17 @@ export default function UserMenu() {
 
   let navigate = useNavigate();
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      return navigate('/');
-    }
-  }, [isLoggedIn]);
+  // useEffect(() => {
+  //   if (isLoggedIn) {
+  //     return navigate('/contacts');
+  //   }
+  // }, [isLoggedIn]);
 
   const dispatch = useDispatch();
 
   const handleLogOutClick = () => {
     dispatch(logOut());
+    navigate('/');
   };
 
   return (
@@ -29,6 +30,12 @@ export default function UserMenu() {
       <nav>
         {!isLoggedIn && (
           <ul>
+            <li>
+              <NavLink to="/">home</NavLink>
+            </li>
+            <li>
+              <NavLink to="/contacts">contacts</NavLink>
+            </li>
             <li>
               <NavLink to="/login">login</NavLink>
             </li>
@@ -38,8 +45,23 @@ export default function UserMenu() {
           </ul>
         )}
       </nav>
+      {isLoggedIn && (
+        <ul>
+          {' '}
+          <li>
+            <NavLink to="/">home</NavLink>
+          </li>
+          <li>
+            <NavLink to="/contacts">contacts</NavLink>
+          </li>
+        </ul>
+      )}
       {isLoggedIn && <span>Добро пожаловать, {user.name}</span>}
-      {isLoggedIn && <button type="button" onClick={handleLogOutClick}>logout</button>}
+      {isLoggedIn && (
+        <button type="button" onClick={handleLogOutClick}>
+          logout
+        </button>
+      )}
       <hr />
     </>
   );

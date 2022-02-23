@@ -2,19 +2,21 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 
 import { login } from '../../redux/auth-actions';
 
 export default function Login() {
-  // const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
-  // let navigate = useNavigate();
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+  let navigate = useNavigate();
 
   // useEffect(() => {
   //   if (isLoggedIn) {
+  //     console.log(isLoggedIn);
   //     return navigate('/');
   //   }
-  // }, [isLoggedIn]);
+  // }, []);
+
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
 
@@ -42,6 +44,7 @@ export default function Login() {
     dispatch(login({ email, password }));
     setPassword('');
     setEmail('');
+    navigate('/contacts');
   };
   return (
     <>
