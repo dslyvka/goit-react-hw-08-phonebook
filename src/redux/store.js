@@ -59,6 +59,7 @@ const initialState = {
   user: { name: null, email: null },
   token: null,
   isLoggedIn: false,
+  isPageRefreshing: false,
 };
 
 const authReducer = createReducer(initialState, {
@@ -86,10 +87,15 @@ const authReducer = createReducer(initialState, {
   [logOut.rejected]: (_, { payload }) => {
     console.log(payload);
   },
+  [fetchCurrentUser.pending]: (state, { payload }) => ({
+    ...state,
+    isPageRefreshing: true,
+  }),
   [fetchCurrentUser.fulfilled]: (state, { payload }) => ({
     ...state,
     isLoggedIn: true,
     user: payload,
+    isPageRefreshing: false,
   }),
 });
 

@@ -1,104 +1,75 @@
-import { Fragment } from 'react';
-
-import Filter from './components/Filter/Filter';
-import Form from './components/Form/Form';
-import Contacts from './components/Contacts/Contacts';
-import { SectionStyled } from './components/Contacts/SectionContacts.styled';
+import PhoneBook from './components/PhoneBook/PhoneBook';
+import Registration from './components/Registration/Registration';
+import Login from './components/Login/Login';
+import Home from './components/Home/Home';
+import UserMenu from './components/UserMenu/UserMenu';
+import PublicRoute from './components/PrivatePrivateRoutes/PublicRoute';
+import PrivateRoute from './components/PrivatePrivateRoutes/PrivateRoute';
 
 import { useState, useEffect } from 'react';
-
 import { useSelector, useDispatch } from 'react-redux';
+import { fetchCurrentUser, refreshCurrentUser } from './redux/auth-actions';
 
-import { fetchContacts } from './redux/phonebook-actions';
-import { fetchCurrentUser } from './redux/auth-actions';
+import { Routes, Route } from 'react-router-dom';
 
-import {
-  addContact,
-  deleteContact,
-  searchContacts,
-} from './redux/phonebook-actions';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import { Rings } from 'react-loader-spinner';
+
+const styled = {
+  display: 'flex',
+  justifyContent: 'center',
+  // marginTop: '100px',
+  // marginBottom: '50%',
+};
 
 function App() {
+  const isPageRefreshing = useSelector(state => state.auth.isPageRefreshing);
+
   const dispatch = useDispatch();
-
-  const contacts = useSelector(state => state.contacts.items);
-  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
-
-  useEffect(() => {
-    if (isLoggedIn) dispatch(fetchContacts());
-  }, [isLoggedIn]);
-
   useEffect(() => {
     dispatch(fetchCurrentUser());
-  }, []);
+  }, [dispatch]);
 
-  const [number, setPhone] = useState('');
-  const [name, setName] = useState('');
+  return !isPageRefreshing ? (
+    <>
+      <UserMenu />
 
-  const { filter } = useSelector(state => {
-    // console.log(state);
-    return state.contacts;
-  });
-  // console.log('contacts', contacts);
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+        <Route
+          exact
+          path="/contacts"
+          element={
+            <PrivateRoute>
+              <PhoneBook />
+            </PrivateRoute>
+          }
+        />
 
-  // const contacts1 = dispatch(fetchContacts());
-  // console.log('data: ', contacts1);
-
-  const onInput = e => {
-    const form = e.currentTarget.name;
-    switch (form) {
-      case 'name':
-        setName(e.currentTarget.value);
-        break;
-      case 'number':
-        setPhone(e.currentTarget.value);
-        break;
-      default:
-        return;
-    }
-  };
-
-  const onClick = e => {
-    e.preventDefault();
-
-    if (e.target.checkValidity()) {
-      if (
-        contacts.find(
-          contact =>
-            contact.name.toLowerCase().includes(name.toLowerCase()) &&
-            contact.name.toLowerCase().length === name.length,
-        )
-      ) {
-        alert(`${name} is already in contacts`);
-        return;
-      }
-      dispatch(addContact({ name, number }));
-      // dispatch(fetchContacts());
-      // Пропихиваем объект, котоорый в редьюсере будет в виде payload
-    }
-  };
-
-  const filterContacts = () => {
-    const contactNormalized = filter.toLowerCase();
-    const filteredContacts = contacts.filter(contact =>
-      contact.name.toLowerCase().includes(contactNormalized),
-    );
-    return filteredContacts;
-  };
-
-  const filteredContacts = filterContacts();
-
-  return (
-    <Fragment>
-      <Form onInput={onInput} onClick={onClick}></Form>
-      <SectionStyled>
-        <Filter value={filter} search={searchContacts}></Filter>
-        <Contacts
-          contacts={filteredContacts}
-          deleteContact={deleteContact}
-        ></Contacts>
-      </SectionStyled>
-    </Fragment>
+        <Route
+          exact
+          path="/registration"
+          element={
+            <PublicRoute restricted>
+              <Registration />
+            </PublicRoute>
+          }
+        />
+        <Route
+          exact
+          path="/login"
+          element={
+            <PublicRoute restricted>
+              <Login />
+            </PublicRoute>
+          }
+        />
+      </Routes>
+    </>
+  ) : (
+    <div style={styled}>
+      <Rings color="#FF0000" height={80} width={80} />
+    </div>
   );
 }
 

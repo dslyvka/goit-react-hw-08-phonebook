@@ -21,39 +21,7 @@ ReactDOM.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter>
-          <UserMenu />
-          <Routes>
-            <Route exact path="/" element={<Home />} />
-            {/* <Route exact path="/contacts" element={<App />} /> */}
-            <Route
-              exact
-              path="/contacts"
-              element={
-                <PrivateRoute>
-                  <App />
-                </PrivateRoute>
-              }
-            />
-
-            <Route  
-              exact
-              path="/registration"
-              element={
-                <PublicRoute restricted>
-                  <Registration />
-                </PublicRoute>
-              }
-            />
-            <Route
-              exact
-              path="/login"
-              element={
-                <PublicRoute restricted>
-                  <Login />
-                </PublicRoute>
-              }
-            />
-          </Routes>
+          <App/>
         </BrowserRouter>
       </PersistGate>
     </Provider>

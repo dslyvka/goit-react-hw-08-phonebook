@@ -32,8 +32,8 @@ export const login = createAsyncThunk('auth/login', async contact => {
 });
 
 export const logOut = createAsyncThunk('auth/logOut', async (_, thunkAPI) => {
-   const state = thunkAPI.getState();
-   const token = state.auth.token;
+  const state = thunkAPI.getState();
+  const token = state.auth.token;
   const response = await fetch(
     'https://connections-api.herokuapp.com/users/logout',
     {
@@ -69,3 +69,4 @@ export const fetchCurrentUser = createAsyncThunk(
     return response;
   },
 );
+

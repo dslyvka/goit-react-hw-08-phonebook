@@ -1,10 +1,10 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import { logOut } from '../../redux/auth-actions';
+
 
 export default function UserMenu() {
   const user = useSelector(state => state.auth.user);
@@ -12,11 +12,6 @@ export default function UserMenu() {
 
   let navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     return navigate('/contacts');
-  //   }
-  // }, [isLoggedIn]);
 
   const dispatch = useDispatch();
 
