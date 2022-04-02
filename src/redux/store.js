@@ -91,6 +91,11 @@ const authReducer = createReducer(initialState, {
     ...state,
     isPageRefreshing: true,
   }),
+  [fetchCurrentUser.rejected]: (state, { payload }) => ({
+    ...state,
+    isLoggedIn: false,
+    isPageRefreshing: false,
+  }),
   [fetchCurrentUser.fulfilled]: (state, { payload }) => ({
     ...state,
     isLoggedIn: true,

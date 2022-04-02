@@ -54,7 +54,7 @@ export const fetchCurrentUser = createAsyncThunk(
     const state = thunkAPI.getState();
     const token = state.auth.token;
     // console.log(token);
-    if (!token) thunkAPI.rejectWithValue();
+    if (!token) return thunkAPI.rejectWithValue();
     const response = await fetch(
       'https://connections-api.herokuapp.com/users/current',
       {

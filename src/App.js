@@ -36,15 +36,6 @@ function App() {
 
       <Routes>
         <Route exact path="/" element={<Home />} />
-        <Route
-          exact
-          path="/contacts"
-          element={
-            <PrivateRoute>
-              <PhoneBook />
-            </PrivateRoute>
-          }
-        />
 
         <Route
           exact
@@ -64,6 +55,15 @@ function App() {
             </PublicRoute>
           }
         />
+          <Route
+            exact
+            path="/contacts"
+            element={
+              <PrivateRoute restricted>
+                <PhoneBook />
+              </PrivateRoute>
+            }
+          />
       </Routes>
     </>
   ) : (
